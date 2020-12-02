@@ -8,35 +8,15 @@ let edgehandles = require('cytoscape-edgehandles');
 
 cytoscape.use( edgehandles ); // register extension
 
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 5000;
+
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "http://localhost5000"); // update to match the domain you will make the request from
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
 
 app.use(express.static(__dirname));
-
-app.get("/auth/google/callback",function(req, res) {
-  console.log("Request is pringting");
-  console.log(req.query.name);
-  console.log(req.query.url);
-  https.get(req.query.url+"&user="+req.query.id, (response) => {
-    let data = "";
-    response.on('data', (chunk) => {
-      data += chunk;
-    });
-
-    response.on('end', () => {
-      console.log("Before printing res json");
-      console.log(data);
-    });
-
-  })
-  .on('error', (error) => {
-    console.log(error);
-  });
-  
-  console.log("After printing after res json");
-  res.send();
-}
-)
-
 
 
 app.listen(port);
